@@ -4,7 +4,7 @@ import "./App.scss";
 import Home from "./pages/Home";
 function App() {
   return (
-    <div>     
+    <div className="app">     
         <Home/>
     </div>
   );
