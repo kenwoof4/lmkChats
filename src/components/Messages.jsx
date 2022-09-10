@@ -3,9 +3,9 @@ import { Message } from "./Message";
 export const Messages = () => {
   return (
     <div className="messages">
+      <Message owner="owner" />
       <Message />
-      <Message />
-      <Message />
+      <Message owner="owner"/>
       <Message />
       <Message />
       <Message />
