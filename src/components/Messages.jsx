@@ -4,11 +4,9 @@ export const Messages = () => {
   return (
     <div className="messages">
       <Message />
+      <Message owner="owner" />
       <Message />
-      <Message />
-      <Message />
-      <Message />
-      <Message />
+      <Message owner="owner" />
       <Message />
       <Message />
       <Message />
