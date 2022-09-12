@@ -1,13 +1,19 @@
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import "./App.scss";
 import Home from "./pages/Home";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import "./App.scss";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
   return (
-    <div className="app">
-      <Register />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/">
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

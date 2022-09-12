@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import "./style.scss";
 import Add from "../img/addAvatar.png";
-// @ts-ignore
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { storage, db } from "../firebase";
-// @ts-ignore
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-// @ts-ignore
 import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [err, setErr] = useState(false);
-
+  const navigate= useNavigate();
   const handleSubmit = async (e) => {
     setErr(false);
     const errMessage = document.getElementById("err");
@@ -40,6 +38,7 @@ export default function Register() {
               photoURL: downloadURL,
             });
             await setDoc(doc(db, "userChats", res.user.uid),{});
+            navigate("/")
           });
         });
       } catch (err) {
