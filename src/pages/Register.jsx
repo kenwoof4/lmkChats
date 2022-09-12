@@ -14,6 +14,9 @@ export default function Register() {
   const [err, setErr] = useState(false);
 
   const handleSubmit = async (e) => {
+    setErr(false);
+    const errMessage = document.getElementById("err");
+    errMessage.textContent = "";
     e.preventDefault();
     const displayName = e.target[0].value;
     const email = e.target[1].value;
@@ -24,35 +27,21 @@ export default function Register() {
         const res = await createUserWithEmailAndPassword(auth, email, password);
         const storageRef = ref(storage, displayName);
 
-        const uploadTask = uploadBytesResumable(storageRef, file);
-
-        // Register three observers:
-        // 1. 'state_changed' observer, called any time the state changes
-        // 2. Error observer, called on failure
-        // 3. Completion observer, called on successful completion
-        uploadTask.on(
-          (error) => {
-            setErr(true);
-          },
-          () => {
-            // Handle successful uploads on complete
-            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-            getDownloadURL(uploadTask.snapshot.ref).then(
-              async (downloadURL) => {
-                await updateProfile(res.user, {
-                  displayName,
-                  photoURL: downloadURL,
-                });
-                await setDoc(doc(db, "users", res.user.uid), {
-                  uid: res.user.uid,
-                  displayName,
-                  email,
-                  photoURL: downloadURL,
-                });
-              }
-            );
-          }
-        );
+        await uploadBytesResumable(storageRef, file).then(() => {
+          getDownloadURL(storageRef).then(async (downloadURL) => {
+            await updateProfile(res.user, {
+              displayName,
+              photoURL: downloadURL,
+            });
+            await setDoc(doc(db, "users", res.user.uid), {
+              uid: res.user.uid,
+              displayName,
+              email,
+              photoURL: downloadURL,
+            });
+            await setDoc(doc(db, "userChats", res.user.uid),{});
+          });
+        });
       } catch (err) {
         setErr(true);
       }
@@ -65,12 +54,29 @@ export default function Register() {
       } else if (!password) {
         errMessage.textContent = "Missing password!";
       } else if (!file) {
-        errMessage.textContent = "Missing file!";
+        errMessage.textContent = "Missing avatar!";
       }
     }
   };
 
-  const handleImageChange = () => {};
+  const handleImageChange = () => {
+    const input = document.getElementById("file");
+    const preview = document.querySelector(".preview");
+    input.addEventListener("change", () => {
+      while (preview.firstChild) {
+        preview.removeChild(preview.firstChild);
+      }
+      // @ts-ignore
+      const curFiles = input.files[0];
+      const para = document.createElement("p");
+      if (curFiles.length === 0) {
+        para.textContent = "No files currently selected for upload";
+      } else {
+        para.textContent = `File name: ${curFiles.name}`;
+        preview.appendChild(para);
+      }
+    });
+  };
 
   return (
     <div className="formContainer">
@@ -82,7 +88,7 @@ export default function Register() {
           <input type="email" placeholder="email" />
           <input type="password" placeholder="password" />
           <input
-            onChange={handleImageChange}
+            onClick={handleImageChange}
             style={{ display: "none" }}
             type="file"
             id="file"
