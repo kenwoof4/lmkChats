@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import "./style.scss";
 import Add from "../img/addAvatar.png";
 // @ts-ignore
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
+import { storage, db } from "../firebase";
+// @ts-ignore
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+// @ts-ignore
+import { doc, setDoc } from "firebase/firestore";
 
 export default function Register() {
   const [err, setErr] = useState(false);
@@ -15,6 +20,35 @@ export default function Register() {
     const file = e.target[3].files[0];
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
+      const storageRef = ref(storage, displayName);
+
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      // Register three observers:
+      // 1. 'state_changed' observer, called any time the state changes
+      // 2. Error observer, called on failure
+      // 3. Completion observer, called on successful completion
+      uploadTask.on(
+        (error) => {
+          setErr(true);
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await updateProfile(res.user, {
+              displayName,
+              photoURL: downloadURL,
+            });
+            await setDoc(doc(db, "users", res.user.uid), {
+              uid: res.user.uid,
+              displayName,
+              email,
+              photoURL: downloadURL,
+            });
+          });
+        }
+      );
     } catch (err) {
       setErr(true);
     }
@@ -34,7 +68,9 @@ export default function Register() {
             <img src={Add} alt="" />
             <span>Add an avatar</span>
           </label>
+
           <button>Sign up</button>
+          {err && <span>Something went wrong</span>}
         </form>
         <p>You have an account? Login</p>
       </div>
