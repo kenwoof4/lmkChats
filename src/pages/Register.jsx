@@ -6,7 +6,7 @@ import { auth } from "../firebase";
 import { storage, db } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [err, setErr] = useState(false);
@@ -101,7 +101,7 @@ export default function Register() {
           {err && <span>Something went wrong</span>}
           <span id="err"></span>
         </form>
-        <p>You have an account? Login</p>
+        <p>You have an account? <Link to="/login">Login</Link></p>
       </div>
     </div>
   );
