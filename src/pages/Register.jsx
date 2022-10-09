@@ -10,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [err, setErr] = useState(false);
-  const navigate= useNavigate();
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     setErr(false);
     const errMessage = document.getElementById("err");
@@ -37,8 +37,8 @@ export default function Register() {
               email,
               photoURL: downloadURL,
             });
-            await setDoc(doc(db, "userChats", res.user.uid),{});
-            navigate("/")
+            await setDoc(doc(db, "userChats", res.user.uid), {});
+            navigate("/");
           });
         });
       } catch (err) {
@@ -101,7 +101,9 @@ export default function Register() {
           {err && <span>Something went wrong</span>}
           <span id="err"></span>
         </form>
-        <p>You have an account? <Link to="/login">Login</Link></p>
+        <p>
+          You have an account? <Link to="/login">Login</Link>
+        </p>
       </div>
     </div>
   );
