@@ -4,12 +4,14 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
+import { SideBarContext } from "../context/SideBarContext";
 import { db } from "../firebase";
 
-export const Chats = () => {
+export const Chats = (props) => {
   const [chats, setChats] = useState([]);
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
+  const { sidebarOpen, changeSideBarOpen } = useContext(SideBarContext);
   useEffect(() => {
     const getChats = () => {
       const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
@@ -24,6 +26,7 @@ export const Chats = () => {
 
   const handleSelect = (u) => {
     dispatch({ type: "CHANGE_USER", payload: u });
+    changeSideBarOpen(!sidebarOpen);
   };
   return (
     <div id="chats" className="chats">
@@ -40,7 +43,7 @@ export const Chats = () => {
             <img src={chat[1].userInfo.photoURL} alt="" />
             <div className="userChatInfo">
               <span>{chat[1].userInfo.displayName}</span>
-              {chat[1].lastMessage &&<p>{chat[1].lastMessage.text}</p>}
+              {chat[1].lastMessage && <p>{chat[1].lastMessage.text}</p>}
             </div>
           </div>
         ))}

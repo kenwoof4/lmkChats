@@ -26,6 +26,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    @include mobile {
+      width: 50%;
+    }
     .logo {
       color: #5d5b8d;
       font-size: 24px;
@@ -93,11 +96,30 @@
     @include tablet {
       width: 90%;
     }
+    @include mobile {
+      width: 80%;
+    }
     .sidebar {
-      flex: 25%;
+      flex: 20%;
       background-color: #3e3c61;
       background-color: var(--dark-purple);
       position: relative;
+      @include mobile {
+        position: absolute;
+        border-radius: 10px;
+        height: 80%;
+        width: 80%;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.6s ease;
+        transform-origin: top -3px;
+        bottom: 7%;
+        &.show{
+        opacity: 1;
+        bottom: 10%;
+        visibility: visible;
+        }
+      }
       .search {
         border-bottom: 1px solid gray;
         color: gray;
@@ -121,8 +143,8 @@
           }
         }
       }
-
       .navbar {
+        border-radius: 10px;
         display: flex;
         align-items: center;
         background-color: #2f2d52;
@@ -199,31 +221,43 @@
             max-width: 200px;
           }
           @include tablet {
-            max-width: 150px;
+            max-width: 80px;
           }
           @include mobile {
-            max-width: 100px;
+            max-width: 165px;
           }
         }
       }
     }
     .chat {
-      flex: 75%;
+      flex: 80%;
+      @include mobile {
+        width: 350px;
+      }
       .chatInfo {
         height: 50px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 10px;
+        padding: 15px;
         color: lightgray;
         background-color: #5d5b8d;
         .chatIcons {
           display: flex;
           gap: 10px;
         }
+        .chatInfoBack {
+          display: none;
+        }
         img {
           height: 24px;
           cursor: pointer;
+        }
+        @include mobile {
+          .chatInfoBack {
+            cursor: pointer;
+            display: contents;
+          }
         }
       }
       .messages {
@@ -298,6 +332,9 @@
           &::placeholder {
             color: lightgray;
           }
+          @include mobile {
+            font-size: 15px;
+          }
         }
         .send {
           display: flex;
@@ -307,7 +344,7 @@
             height: 24px;
             cursor: pointer;
           }
-          button:hover{
+          button:hover {
             background-color: #8297dd;
           }
           button {
