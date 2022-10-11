@@ -42,7 +42,7 @@ export const Search = () => {
     }
   };
   const handleKey = (e) => {
-    e.code === "Enter" && handleSearch();
+    e.keyCode === 13 && handleSearch();
   };
   const handleSelect = async (e) => {
     const element = document.getElementById(`chats`);

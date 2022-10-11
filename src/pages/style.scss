@@ -148,6 +148,45 @@
             }
           }
         }
+        .userChat {
+          display: flex;
+          padding: 10px;
+          align-items: center;
+          gap: 10px;
+          color: white;
+          cursor: pointer;
+          overflow: hidden;
+          border-radius: 5%;
+          img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+          .userChatInfo {
+            span {
+              font-size: 18px;
+              font-weight: 500;
+            }
+            p {
+              max-width: 300px;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+              font-size: 14px;
+              color: lightgray;
+              @include laptop {
+                max-width: 200px;
+              }
+              @include tablet {
+                max-width: 80px;
+              }
+              @include mobile {
+                max-width: 165px;
+              }
+            }
+          }
+        }
       }
       .navbar {
         border-radius: 10px;
