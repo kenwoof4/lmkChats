@@ -88,6 +88,7 @@ export const Search = () => {
           onKeyDown={handleKey}
           onChange={(e) => setUsername(e.target.value)}
           value={username}
+          enterKeyHint="go"
         />
       </div>
       {err && <span>Something went wrong</span>}
