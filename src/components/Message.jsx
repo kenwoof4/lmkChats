@@ -12,6 +12,14 @@ export const Message = ({ message }) => {
     return () => {};
   }, [message]);
 
+  const timeCoverter = (message) => {
+    let time = message?.date.toDate();
+    let local= time.toLocaleTimeString([],{hour: '2-digit', minute:'2-digit',hour12:true});
+    let month=time.getUTCMonth() + 1;
+    let strTime= local;
+    return strTime;
+  };
+
   return (
     <div
       ref={ref}
@@ -26,10 +34,10 @@ export const Message = ({ message }) => {
           }
           alt=""
         />
-        <span>Just now</span>
+        <span>{timeCoverter(message)}</span>
       </div>
       <div className="messageContent">
-        <p>{message.text}</p>
+        {message.text !=='' &&<p>{message.text}</p>}
         {message.img && <img src={message.img} alt="" />}
       </div>
     </div>
